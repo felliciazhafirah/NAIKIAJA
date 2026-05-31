@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum BookingStatus {
+  PENDING
+  PAID
+  CANCELLED
+  REFUNDED
+}
+
+model User {
+  id          Int   @id @default(autoincrement())
+  name        String
+  email       String   @unique
+  password    String
+  phone       String?
+
+  role        Role     @default(USER)
+
+  createdAt   DateTime @default(now())
+
+  bookings    Booking[]
+}
+
+model Bus {
+  id            Int   @id @default(autoincrement())
+
+  name          String
+  class         String
+  totalSeats    Int
+  facilities    String
+
+  schedules     Schedule[]
+  seats         Seat[]
+}
+
+model Schedule {
+  id                Int   @id @default(autoincrement())
+
+  origin            String
+  destination       String
+
+  departureTime     DateTime
+  arrivalTime       DateTime
+
+  price             Int
+
+  totalTickets      Int
+  availableTickets  Int
+
+  busId             Int
+  bus               Bus @relation(fields: [busId], references: [id])
+
+  bookings          Booking[]
+}
+
+model Seat {
+  id            Int   @id @default(autoincrement())
+
+  seatNumber    String
+  isBooked      Boolean  @default(false)
+
+  busId         Int
+  bus           Bus @relation(fields: [busId], references: [id])
+
+  bookingId     Int?
+  booking       Booking? @relation(fields: [bookingId], references: [id])
+}
+
+model Booking {
+  id            Int   @id @default(autoincrement())
+
+  totalPrice    Int
+
+  status        BookingStatus
+
+  userId        Int
+  user          User @relation(fields: [userId], references: [id])
+
+  scheduleId    Int
+  schedule      Schedule @relation(fields: [scheduleId], references: [id])
+
+  seats         Seat[]
+
+  createdAt     DateTime @default(now())
+
+  ticket        Ticket?
+  refunds Refund[]
+}
+
+model Ticket {
+  id            Int   @id @default(autoincrement())
+
+  qrCode        String
+
+  bookingId     Int   @unique
+  booking       Booking @relation(fields: [bookingId], references: [id])
+  
+}
+
+model Refund {
+  id          Int @id @default(autoincrement())
+
+  reason      String
+
+  status      String
+
+  bookingId   Int
+  booking     Booking @relation(fields: [bookingId], references: [id])
+}
