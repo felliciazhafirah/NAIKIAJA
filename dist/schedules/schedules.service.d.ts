@@ -5,6 +5,11 @@ export declare class SchedulesService {
     private prisma;
     constructor(prisma: PrismaService);
     create(dto: CreateScheduleDto): Promise<{
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        isActive: boolean;
+        busId: number;
         origin: string;
         destination: string;
         departureTime: Date;
@@ -12,10 +17,13 @@ export declare class SchedulesService {
         price: number;
         totalTickets: number;
         availableTickets: number;
-        id: number;
-        busId: number;
     }>;
     update(id: number, dto: UpdateScheduleDto): Promise<{
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        isActive: boolean;
+        busId: number;
         origin: string;
         destination: string;
         departureTime: Date;
@@ -23,10 +31,22 @@ export declare class SchedulesService {
         price: number;
         totalTickets: number;
         availableTickets: number;
-        id: number;
-        busId: number;
     }>;
-    remove(id: number): import(".prisma/client").Prisma.Prisma__ScheduleClient<{
+    getSeats(scheduleId: number): Promise<{
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        seatNumber: string;
+        isBooked: boolean;
+        busId: number;
+        bookingId: number | null;
+    }[]>;
+    remove(id: number): Promise<{
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        isActive: boolean;
+        busId: number;
         origin: string;
         destination: string;
         departureTime: Date;
@@ -34,18 +54,24 @@ export declare class SchedulesService {
         price: number;
         totalTickets: number;
         availableTickets: number;
-        id: number;
-        busId: number;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs>;
-    findAll(): Promise<({
+    }>;
+    findByClass(busClass: string): import(".prisma/client").Prisma.PrismaPromise<({
         bus: {
-            id: number;
             name: string;
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
             class: string;
             totalSeats: number;
             facilities: string;
+            isActive: boolean;
         };
     } & {
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        isActive: boolean;
+        busId: number;
         origin: string;
         destination: string;
         departureTime: Date;
@@ -53,7 +79,55 @@ export declare class SchedulesService {
         price: number;
         totalTickets: number;
         availableTickets: number;
+    })[]>;
+    findByDate(date: string): Promise<({
+        bus: {
+            name: string;
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
+            class: string;
+            totalSeats: number;
+            facilities: string;
+            isActive: boolean;
+        };
+    } & {
+        createdAt: Date;
+        updatedAt: Date;
         id: number;
+        isActive: boolean;
         busId: number;
+        origin: string;
+        destination: string;
+        departureTime: Date;
+        arrivalTime: Date;
+        price: number;
+        totalTickets: number;
+        availableTickets: number;
+    })[]>;
+    findAll(): Promise<({
+        bus: {
+            name: string;
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
+            class: string;
+            totalSeats: number;
+            facilities: string;
+            isActive: boolean;
+        };
+    } & {
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        isActive: boolean;
+        busId: number;
+        origin: string;
+        destination: string;
+        departureTime: Date;
+        arrivalTime: Date;
+        price: number;
+        totalTickets: number;
+        availableTickets: number;
     })[]>;
 }

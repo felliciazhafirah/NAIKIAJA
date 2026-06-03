@@ -26,11 +26,20 @@ let TicketsService = class TicketsService {
         if (!booking) {
             throw new common_1.NotFoundException('Booking not found');
         }
-        const qr = await QRCode.toDataURL(bookingId);
+        const qr = await QRCode.toDataURL(bookingId.toString());
         return this.prisma.ticket.create({
             data: {
                 bookingId,
                 qrCode: qr,
+            },
+            include: {
+                booking: {
+                    include: {
+                        user: true,
+                        schedule: true,
+                        seats: true,
+                    },
+                },
             },
         });
     }
@@ -38,6 +47,15 @@ let TicketsService = class TicketsService {
         return this.prisma.ticket.findUnique({
             where: {
                 bookingId,
+            },
+            include: {
+                booking: {
+                    include: {
+                        schedule: true,
+                        seats: true,
+                        user: true,
+                    },
+                },
             },
         });
     }

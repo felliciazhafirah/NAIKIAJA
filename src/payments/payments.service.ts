@@ -8,6 +8,7 @@ import {
 } from '@prisma/client'
 
 import { PrismaService } from '../prisma/prisma.service'
+import { ApiProperty } from '@nestjs/swagger'
 
 @Injectable()
 export class PaymentsService {

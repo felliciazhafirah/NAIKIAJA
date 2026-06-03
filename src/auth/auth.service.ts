@@ -15,7 +15,7 @@ export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async register(dto: RegisterDto) {
     const hashed = await bcrypt.hash(dto.password, 10)
@@ -30,6 +30,8 @@ export class AuthService {
   }
 
   async login(dto: LoginDto) {
+    console.log(dto)
+
     const user = await this.prisma.user.findUnique({
       where: {
         email: dto.email,
@@ -52,8 +54,15 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign({
         sub: user.id,
-        role: user.role,
+        email: user.email, // 👈 TAMBAH INI
+        role: user.role,    // sudah ada
       }),
+
+      user: {
+        id: user.id,
+        name: user.name,
+        role: user.role,
+      },
     }
   }
 }

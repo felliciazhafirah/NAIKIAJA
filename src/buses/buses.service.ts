@@ -5,7 +5,7 @@ import { CreateBusDto } from './dto/create-bus.dto'
 
 @Injectable()
 export class BusesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create(dto: CreateBusDto) {
     const bus = await this.prisma.bus.create({
@@ -28,14 +28,26 @@ export class BusesService {
     return bus
   }
 
-   remove(id: number) {
-    return this.prisma.bus.delete({
-      where: { id },
+  async remove(id: number) {
+    return this.prisma.bus.update({
+      where: {
+        id,
+      },
+
+      data: {
+        isActive: false,
+      },
     })
   }
-  
 
-  async findAll() {
-    return this.prisma.bus.findMany()
-  }
+
+  async findAll(busClass?: string) {
+  return this.prisma.bus.findMany({
+    where: busClass
+      ? {
+          class: busClass,
+        }
+      : {},
+  })
+}
 }

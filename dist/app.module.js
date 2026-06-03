@@ -17,6 +17,9 @@ const schedules_module_1 = require("./schedules/schedules.module");
 const refunds_module_1 = require("./refunds/refunds.module");
 const payments_module_1 = require("./payments/payments.module");
 const tickets_module_1 = require("./tickets/tickets.module");
+const users_module_1 = require("./users/users.module");
+const reports_module_1 = require("./reports/reports.module");
+const notification_module_1 = require("./notification/notification.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -31,7 +34,10 @@ exports.AppModule = AppModule = __decorate([
             schedules_module_1.SchedulesModule,
             refunds_module_1.RefundsModule,
             payments_module_1.PaymentsModule,
-            tickets_module_1.TicketsModule
+            tickets_module_1.TicketsModule,
+            users_module_1.UsersModule,
+            reports_module_1.ReportsModule,
+            notification_module_1.NotificationModule
         ],
     })
 ], AppModule);

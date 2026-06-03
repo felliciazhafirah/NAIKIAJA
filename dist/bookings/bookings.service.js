@@ -17,9 +17,16 @@ let BookingsService = class BookingsService {
         this.prisma = prisma;
     }
     async createBooking(userId, dto) {
+        const schedule = await this.prisma.schedule.findUnique({
+            where: { id: dto.scheduleId },
+        });
+        if (!schedule) {
+            throw new common_1.BadRequestException('Schedule not found');
+        }
         const seats = await this.prisma.seat.findMany({
             where: {
-                id: {
+                busId: schedule.busId,
+                seatNumber: {
                     in: dto.seatIds,
                 },
             },
@@ -28,11 +35,6 @@ let BookingsService = class BookingsService {
         if (booked) {
             throw new common_1.BadRequestException('Seat already booked');
         }
-        const schedule = await this.prisma.schedule.findUnique({
-            where: {
-                id: dto.scheduleId,
-            },
-        });
         if (!schedule) {
             throw new common_1.BadRequestException('Schedule not found');
         }
@@ -40,14 +42,21 @@ let BookingsService = class BookingsService {
             dto.seatIds.length) {
             throw new common_1.BadRequestException('Tickets sold out');
         }
+        const seatCount = dto.seatIds.length;
         const booking = await this.prisma.booking.create({
             data: {
+                Namalengkap: dto.Namalengkap,
+                Email: dto.Email,
+                NoHp: dto.NoHp,
+                KTP: dto.KTP,
                 userId,
                 scheduleId: dto.scheduleId,
-                totalPrice: seats.length * schedule.price,
+                totalPrice: seatCount * schedule.price,
                 status: 'PENDING',
                 seats: {
-                    connect: dto.seatIds.map(id => ({ id })),
+                    connect: seats.map(seat => ({
+                        id: seat.id,
+                    })),
                 },
             },
         });
@@ -63,7 +72,7 @@ let BookingsService = class BookingsService {
         });
         await this.prisma.seat.updateMany({
             where: {
-                id: {
+                seatNumber: {
                     in: dto.seatIds,
                 },
             },
@@ -73,6 +82,41 @@ let BookingsService = class BookingsService {
             },
         });
         return booking;
+    }
+    async payBooking(id) {
+        return this.prisma.booking.update({
+            where: { id },
+            data: {
+                status: 'PAID',
+            },
+        });
+    }
+    async getInvoice(id) {
+        const booking = await this.prisma.booking.findUnique({
+            where: { id },
+            include: {
+                schedule: true,
+                seats: true,
+            },
+        });
+        if (!booking) {
+            throw new common_1.NotFoundException('Booking tidak ditemukan');
+        }
+        if (booking.status !== 'PAID') {
+            throw new common_1.BadRequestException('Pembayaran belum selesai');
+        }
+        return booking;
+    }
+    async getMyBookings(userId) {
+        return this.prisma.booking.findMany({
+            where: {
+                userId,
+            },
+            include: {
+                schedule: true,
+                seats: true,
+            },
+        });
     }
 };
 exports.BookingsService = BookingsService;

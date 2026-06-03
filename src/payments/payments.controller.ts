@@ -4,22 +4,20 @@ import {
   Post,
 } from '@nestjs/common'
 
+
 import { PaymentsService } from './payments.service'
+import { CreatePaymentDto } from './dto/create-payment.dto'
 
 @Controller('payments')
 export class PaymentsController {
-
   constructor(
-    private service: PaymentsService,
+    private readonly paymentsService: PaymentsService,
   ) {}
 
   @Post()
-  pay(
-    @Body() body: { bookingId: number },
-  ) {
-
-    return this.service.pay(
-      body.bookingId,
+  pay(@Body() dto: CreatePaymentDto) {
+    return this.paymentsService.pay(
+      dto.bookingId,
     )
   }
 }

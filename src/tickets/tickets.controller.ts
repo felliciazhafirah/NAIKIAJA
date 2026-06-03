@@ -7,31 +7,29 @@ import {
 } from '@nestjs/common'
 
 import { TicketsService } from './tickets.service'
+import { CreateTicketDto } from './dto/create-ticket.dto'
 
 @Controller('tickets')
 export class TicketsController {
-
   constructor(
-    private service: TicketsService,
+    private readonly ticketsService: TicketsService,
   ) {}
 
   @Post()
-  generate(
-    @Body() body: { bookingId: number },
+  create(
+    @Body() dto: CreateTicketDto,
   ) {
-
-    return this.service.generate(
-      body.bookingId,
+    return this.ticketsService.generate(
+      dto.bookingId,
     )
   }
 
   @Get(':bookingId')
-  findTicket(
-    @Param('bookingId') bookingId: number,
+  findOne(
+    @Param('bookingId') bookingId: string,
   ) {
-
-    return this.service.findTicket(
-      bookingId,
+    return this.ticketsService.findTicket(
+      Number(bookingId),
     )
   }
 }

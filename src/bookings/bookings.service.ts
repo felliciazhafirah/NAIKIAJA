@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common'
 
 import { PrismaService } from '../prisma/prisma.service'
@@ -8,24 +9,30 @@ import { CreateBookingDto } from './dto/create-booking.dto'
 
 @Injectable()
 export class BookingsService {
-
   constructor(
     private prisma: PrismaService,
-  ) {}
+  ) { }
 
   async createBooking(
     userId: number,
     dto: CreateBookingDto,
   ) {
+    const schedule = await this.prisma.schedule.findUnique({
+      where: { id: dto.scheduleId },
+    });
+
+    if (!schedule) {
+      throw new BadRequestException('Schedule not found');
+    }
 
     const seats = await this.prisma.seat.findMany({
       where: {
-        id: {
+        busId: schedule.busId, // ✔️ sekarang aman
+        seatNumber: {
           in: dto.seatIds,
         },
       },
-    })
-
+    });
     const booked = seats.find(
       seat => seat.isBooked,
     )
@@ -36,13 +43,6 @@ export class BookingsService {
       )
     }
 
-    // CHECK SCHEDULE
-    const schedule =
-      await this.prisma.schedule.findUnique({
-        where: {
-          id: dto.scheduleId,
-        },
-      })
 
     if (!schedule) {
       throw new BadRequestException(
@@ -50,7 +50,6 @@ export class BookingsService {
       )
     }
 
-    // CHECK TICKET
     if (
       schedule.availableTickets <
       dto.seatIds.length
@@ -60,33 +59,34 @@ export class BookingsService {
       )
     }
 
-    // CREATE BOOKING
-    const booking =
-      await this.prisma.booking.create({
-        data: {
-          userId,
+    const seatCount = dto.seatIds.length;
 
-          scheduleId: dto.scheduleId,
+    const booking = await this.prisma.booking.create({
+      data: {
+        Namalengkap: dto.Namalengkap,
+        Email: dto.Email,
+        NoHp: dto.NoHp,
+        KTP: dto.KTP,
+        userId,
 
-          totalPrice:
-            seats.length * schedule.price,
+        scheduleId: dto.scheduleId,
 
-          status: 'PENDING',
+        totalPrice: seatCount * schedule.price,
 
-          seats: {
-            connect: dto.seatIds.map(
-              id => ({ id }),
-            ),
-          },
+        status: 'PENDING',
+
+        seats: {
+          connect: seats.map(seat => ({
+            id: seat.id,
+          })),
         },
-      })
+      },
+    });
 
-    // REDUCE TICKET
     await this.prisma.schedule.update({
       where: {
         id: dto.scheduleId,
       },
-
       data: {
         availableTickets: {
           decrement: dto.seatIds.length,
@@ -94,14 +94,12 @@ export class BookingsService {
       },
     })
 
-    // UPDATE SEAT
     await this.prisma.seat.updateMany({
       where: {
-        id: {
+        seatNumber: {
           in: dto.seatIds,
         },
       },
-
       data: {
         isBooked: true,
         bookingId: booking.id,
@@ -109,5 +107,49 @@ export class BookingsService {
     })
 
     return booking
+  }
+
+  async payBooking(id: number) {
+    return this.prisma.booking.update({
+      where: { id },
+      data: {
+        status: 'PAID',
+      },
+    });
+  }
+
+  async getInvoice(id: number) {
+    const booking = await this.prisma.booking.findUnique({
+      where: { id },
+      include: {
+        schedule: true,
+        seats: true,
+      },
+    });
+
+    if (!booking) {
+      throw new NotFoundException('Booking tidak ditemukan');
+    }
+
+    if (booking.status !== 'PAID') {
+      throw new BadRequestException(
+        'Pembayaran belum selesai',
+      );
+    }
+
+    return booking;
+  }
+
+
+  async getMyBookings(userId: number) {
+    return this.prisma.booking.findMany({
+      where: {
+        userId,
+      },
+      include: {
+        schedule: true,
+        seats: true,
+      },
+    })
   }
 }

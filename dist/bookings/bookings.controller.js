@@ -15,17 +15,54 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BookingsController = void 0;
 const common_1 = require("@nestjs/common");
 const bookings_service_1 = require("./bookings.service");
+const common_2 = require("@nestjs/common");
 const create_booking_dto_1 = require("./dto/create-booking.dto");
+const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
+const swagger_1 = require("@nestjs/swagger");
 let BookingsController = class BookingsController {
     constructor(service) {
         this.service = service;
     }
+    getMyBookings(req) {
+        return this.service.getMyBookings(req.user.userId);
+    }
+    async payBooking(id) {
+        return this.service.payBooking(Number(id));
+    }
+    getInvoice(id) {
+        return this.service.getInvoice(Number(id));
+    }
     create(dto) {
-        return this.service.createBooking(1, dto);
+        return this.service.createBooking(dto.userId, dto);
     }
 };
 exports.BookingsController = BookingsController;
 __decorate([
+    (0, swagger_1.ApiBearerAuth)('access-token'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_2.Get)('my'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], BookingsController.prototype, "getMyBookings", null);
+__decorate([
+    (0, common_1.Patch)(':id/pay'),
+    __param(0, (0, common_2.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], BookingsController.prototype, "payBooking", null);
+__decorate([
+    (0, common_2.Get)(':id/invoice'),
+    __param(0, (0, common_2.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], BookingsController.prototype, "getInvoice", null);
+__decorate([
+    (0, swagger_1.ApiBearerAuth)('access-token'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),

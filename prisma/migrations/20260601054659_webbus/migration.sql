@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `bus` ADD COLUMN `isActive` BOOLEAN NOT NULL DEFAULT true;

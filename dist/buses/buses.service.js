@@ -32,13 +32,24 @@ let BusesService = class BusesService {
         });
         return bus;
     }
-    remove(id) {
-        return this.prisma.bus.delete({
-            where: { id },
+    async remove(id) {
+        return this.prisma.bus.update({
+            where: {
+                id,
+            },
+            data: {
+                isActive: false,
+            },
         });
     }
-    async findAll() {
-        return this.prisma.bus.findMany();
+    async findAll(busClass) {
+        return this.prisma.bus.findMany({
+            where: busClass
+                ? {
+                    class: busClass,
+                }
+                : {},
+        });
     }
 };
 exports.BusesService = BusesService;

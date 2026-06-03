@@ -12,7 +12,7 @@ export class TicketsService {
 
   constructor(
     private prisma: PrismaService,
-  ) {}
+  ) { }
 
   async generate(bookingId: number) {
 
@@ -30,21 +30,42 @@ export class TicketsService {
     }
 
     const qr =
-      await QRCode.toDataURL(bookingId)
+      await QRCode.toDataURL(
+        bookingId.toString(),
+      )
 
     return this.prisma.ticket.create({
       data: {
         bookingId,
         qrCode: qr,
       },
+
+      include: {
+        booking: {
+          include: {
+            user: true,
+            schedule: true,
+            seats: true,
+          },
+        },
+      },
     })
   }
 
   async findTicket(bookingId: number) {
-
     return this.prisma.ticket.findUnique({
       where: {
         bookingId,
+      },
+
+      include: {
+        booking: {
+          include: {
+            schedule: true,
+            seats: true,
+            user: true,
+          },
+        },
       },
     })
   }

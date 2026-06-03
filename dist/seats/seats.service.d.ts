@@ -3,6 +3,8 @@ export declare class SeatsService {
     private prisma;
     constructor(prisma: PrismaService);
     getSeats(busId: number): Promise<{
+        createdAt: Date;
+        updatedAt: Date;
         id: number;
         seatNumber: string;
         isBooked: boolean;

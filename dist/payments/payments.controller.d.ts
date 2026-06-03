@@ -1,10 +1,9 @@
 import { PaymentsService } from './payments.service';
+import { CreatePaymentDto } from './dto/create-payment.dto';
 export declare class PaymentsController {
-    private service;
-    constructor(service: PaymentsService);
-    pay(body: {
-        bookingId: number;
-    }): Promise<{
+    private readonly paymentsService;
+    constructor(paymentsService: PaymentsService);
+    pay(dto: CreatePaymentDto): Promise<{
         message: string;
     }>;
 }

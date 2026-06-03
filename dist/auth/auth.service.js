@@ -30,6 +30,7 @@ let AuthService = class AuthService {
         });
     }
     async login(dto) {
+        console.log(dto);
         const user = await this.prisma.user.findUnique({
             where: {
                 email: dto.email,
@@ -45,8 +46,14 @@ let AuthService = class AuthService {
         return {
             access_token: this.jwtService.sign({
                 sub: user.id,
+                email: user.email,
                 role: user.role,
             }),
+            user: {
+                id: user.id,
+                name: user.name,
+                role: user.role,
+            },
         };
     }
 };

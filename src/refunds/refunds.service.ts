@@ -1,10 +1,12 @@
 import {
   Injectable,
   NotFoundException,
+  BadRequestException,
+  
 } from '@nestjs/common'
 
 import { PrismaService } from '../prisma/prisma.service'
-
+import { NotificationService } from '../notification/notification.service';
 import { CreateRefundDto } from './dto/create-refund.dto'
 
 @Injectable()
@@ -12,8 +14,10 @@ export class RefundsService {
 
   constructor(
     private prisma: PrismaService,
+    private notificationService: NotificationService,
   ) {}
 
+  
   async create(dto: CreateRefundDto) {
 
     const booking =
@@ -27,11 +31,13 @@ export class RefundsService {
         },
       })
 
-    if (!booking) {
-      throw new NotFoundException(
-        'Booking not found',
-      )
-    }
+   if (!booking) {
+  throw new NotFoundException('Booking tidak ditemukan');
+}
+
+if (booking.status !== 'PAID') {
+  throw new BadRequestException('Booking belum dibayar');
+}
 
     await this.prisma.seat.updateMany({
       where: {
@@ -63,16 +69,78 @@ export class RefundsService {
     })
   }
 
-  async approve(id: number) {
-
-    return this.prisma.refund.update({
-      where: {
-        id,
+  
+  async getMyRefund(userId: number) {
+  return this.prisma.refund.findMany({
+    where: {
+      booking: {
+        userId: userId,
       },
-
-      data: {
-        status: 'APPROVED',
-      },
-    })
-  }
+    },
+    include: {
+      booking: true,
+    },
+  });
 }
+
+  async findAll(status?: string) {
+  return this.prisma.refund.findMany({
+    where: status
+      ? {
+          status: status,
+        }
+      : {},
+    include: {
+      booking: true,
+      // user kalau mau
+    },
+    orderBy: {
+      id: 'desc',
+    },
+  });
+}
+
+async findOne(id: number) {
+    console.log('ID masuk:', id);
+  return this.prisma.refund.findUnique({
+    where: {
+      id,
+    },
+  });
+}
+
+async findMyRefunds(userId: number) {
+  return this.prisma.refund.findMany({
+    where: {
+      booking: {
+        userId,
+      },
+    },
+    include: {
+      booking: true,
+    },
+  });
+}
+
+  async approve(refundId: number) {
+  const refund = await this.prisma.refund.update({
+    where: { id: refundId },
+    data: {
+      status: 'APPROVED',
+    },
+    include: {
+      booking: true,
+    },
+  });
+
+  // 🔔 kirim notifikasi ke user
+  await this.notificationService.create(
+    refund.booking.userId,
+    'Refund Disetujui',
+    `Refund untuk booking #${refund.booking.id} telah disetujui. Dana akan diproses.`,
+  );
+
+  return refund;
+}
+    }
+  

@@ -15,15 +15,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TicketsController = void 0;
 const common_1 = require("@nestjs/common");
 const tickets_service_1 = require("./tickets.service");
+const create_ticket_dto_1 = require("./dto/create-ticket.dto");
 let TicketsController = class TicketsController {
-    constructor(service) {
-        this.service = service;
+    constructor(ticketsService) {
+        this.ticketsService = ticketsService;
     }
-    generate(body) {
-        return this.service.generate(body.bookingId);
+    create(dto) {
+        return this.ticketsService.generate(dto.bookingId);
     }
-    findTicket(bookingId) {
-        return this.service.findTicket(bookingId);
+    findOne(bookingId) {
+        return this.ticketsService.findTicket(Number(bookingId));
     }
 };
 exports.TicketsController = TicketsController;
@@ -31,16 +32,16 @@ __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [create_ticket_dto_1.CreateTicketDto]),
     __metadata("design:returntype", void 0)
-], TicketsController.prototype, "generate", null);
+], TicketsController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(':bookingId'),
     __param(0, (0, common_1.Param)('bookingId')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
-], TicketsController.prototype, "findTicket", null);
+], TicketsController.prototype, "findOne", null);
 exports.TicketsController = TicketsController = __decorate([
     (0, common_1.Controller)('tickets'),
     __metadata("design:paramtypes", [tickets_service_1.TicketsService])

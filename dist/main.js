@@ -3,19 +3,33 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 const swagger_1 = require("@nestjs/swagger");
+const common_1 = require("@nestjs/common");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
-    app.enableCors();
+    app.enableCors({
+        origin: [
+            'http://localhost:3000',
+        ],
+        credentials: true,
+    });
     const config = new swagger_1.DocumentBuilder()
-        .setTitle('API')
+        .setTitle('Backend NestJS Tiket')
         .setDescription('Dokumentasi API')
         .setVersion('1.0')
+        .addBearerAuth({
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+    }, 'access-token')
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, config);
+    app.useGlobalPipes(new common_1.ValidationPipe({
+        transform: true,
+    }));
     swagger_1.SwaggerModule.setup('api', app, document);
-    await app.listen(4500, '0.0.0.0');
-    console.log('Server running on http://localhost:4500');
-    console.log('Swagger running on http://localhost:4500/api');
+    const port = process.env.PORT || 4500;
+    await app.listen(port, '0.0.0.0');
+    console.log(`Server running on port ${port}`);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

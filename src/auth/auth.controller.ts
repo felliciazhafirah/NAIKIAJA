@@ -8,6 +8,7 @@ import {
 import { AuthService } from './auth.service'
 import { RegisterDto } from './dto/register.dto'
 import { LoginDto } from './dto/login.dto'
+import { ApiBearerAuth } from '@nestjs/swagger'
 
 @Controller('auth')
 export class AuthController {
@@ -15,11 +16,7 @@ export class AuthController {
     private readonly authService: AuthService,
   ) {}
 
-  @Get()
-test() {
-  return 'AUTH WORKING'
-}
-
+  
   @Post('register')
   register(@Body() dto: RegisterDto) {
     return this.authService.register(dto)
@@ -27,6 +24,6 @@ test() {
 
   @Post('login')
   login(@Body() dto: LoginDto) {
-    return this.authService.login(dto)
-  }
+  return this.authService.login(dto)
+}
 }

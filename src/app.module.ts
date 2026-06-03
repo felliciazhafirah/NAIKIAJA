@@ -8,7 +8,9 @@ import { SchedulesModule } from './schedules/schedules.module'
 import { RefundsModule } from './refunds/refunds.module'
 import { PaymentsModule } from './payments/payments.module'
 import { TicketsModule } from './tickets/tickets.module'
-
+import { UsersModule } from './users/users.module';
+import { ReportsModule } from './reports/reports.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -20,7 +22,10 @@ import { TicketsModule } from './tickets/tickets.module'
     SchedulesModule,
     RefundsModule,
     PaymentsModule,
-    TicketsModule
+    TicketsModule,
+    UsersModule,
+    ReportsModule,
+    NotificationModule
   ],
 })
 export class AppModule {}

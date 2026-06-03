@@ -16,6 +16,11 @@ exports.BusesController = void 0;
 const common_1 = require("@nestjs/common");
 const buses_service_1 = require("./buses.service");
 const create_bus_dto_1 = require("./dto/create-bus.dto");
+const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
+const roles_guard_1 = require("../auth/roles.guard");
+const roles_decorator_1 = require("../auth/roles.decorator");
+const role_enum_1 = require("../auth/role.enum");
+const swagger_1 = require("@nestjs/swagger");
 let BusesController = class BusesController {
     constructor(service) {
         this.service = service;
@@ -32,6 +37,9 @@ let BusesController = class BusesController {
 };
 exports.BusesController = BusesController;
 __decorate([
+    (0, swagger_1.ApiBearerAuth)('access-token'),
+    (0, roles_decorator_1.Roles)(role_enum_1.Role.ADMIN),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -39,7 +47,12 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], BusesController.prototype, "create", null);
 __decorate([
+    (0, swagger_1.ApiBearerAuth)('access-token'),
+    (0, roles_decorator_1.Roles)(role_enum_1.Role.ADMIN),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     (0, common_1.Delete)(':id'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(role_enum_1.Role.ADMIN),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -52,6 +65,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], BusesController.prototype, "findAll", null);
 exports.BusesController = BusesController = __decorate([
+    (0, roles_decorator_1.Roles)(role_enum_1.Role.ADMIN),
     (0, common_1.Controller)('buses'),
     __metadata("design:paramtypes", [buses_service_1.BusesService])
 ], BusesController);

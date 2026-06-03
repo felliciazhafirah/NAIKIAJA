@@ -4,7 +4,6 @@ import { LoginDto } from './dto/login.dto';
 export declare class AuthController {
     private readonly authService;
     constructor(authService: AuthService);
-    test(): string;
     register(dto: RegisterDto): Promise<{
         name: string;
         email: string;
@@ -12,9 +11,15 @@ export declare class AuthController {
         phone: string | null;
         role: import(".prisma/client").$Enums.Role;
         createdAt: Date;
+        updatedAt: Date;
         id: number;
     }>;
     login(dto: LoginDto): Promise<{
         access_token: string;
+        user: {
+            id: number;
+            name: string;
+            role: import(".prisma/client").$Enums.Role;
+        };
     }>;
 }

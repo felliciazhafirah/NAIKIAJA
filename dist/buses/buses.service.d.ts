@@ -5,23 +5,32 @@ export declare class BusesService {
     constructor(prisma: PrismaService);
     create(dto: CreateBusDto): Promise<{
         name: string;
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
         class: string;
         totalSeats: number;
         facilities: string;
-        id: number;
+        isActive: boolean;
     }>;
-    remove(id: number): import(".prisma/client").Prisma.Prisma__BusClient<{
+    remove(id: number): Promise<{
         name: string;
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
         class: string;
         totalSeats: number;
         facilities: string;
-        id: number;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs>;
-    findAll(): Promise<{
+        isActive: boolean;
+    }>;
+    findAll(busClass?: string): Promise<{
         name: string;
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
         class: string;
         totalSeats: number;
         facilities: string;
-        id: number;
+        isActive: boolean;
     }[]>;
 }

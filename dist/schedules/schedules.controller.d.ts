@@ -12,6 +12,9 @@ export declare class SchedulesController {
         price: number;
         totalTickets: number;
         availableTickets: number;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
         id: number;
         busId: number;
     }>;
@@ -23,10 +26,13 @@ export declare class SchedulesController {
         price: number;
         totalTickets: number;
         availableTickets: number;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
         id: number;
         busId: number;
     }>;
-    remove(id: string): import(".prisma/client").Prisma.Prisma__ScheduleClient<{
+    remove(id: string): Promise<{
         origin: string;
         destination: string;
         departureTime: Date;
@@ -34,11 +40,17 @@ export declare class SchedulesController {
         price: number;
         totalTickets: number;
         availableTickets: number;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
         id: number;
         busId: number;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs>;
+    }>;
     findAll(): Promise<({
         bus: {
+            isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
             id: number;
             name: string;
             class: string;
@@ -53,7 +65,69 @@ export declare class SchedulesController {
         price: number;
         totalTickets: number;
         availableTickets: number;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
         id: number;
         busId: number;
     })[]>;
+    findByClass(busClass: string): import(".prisma/client").Prisma.PrismaPromise<({
+        bus: {
+            isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
+            name: string;
+            class: string;
+            totalSeats: number;
+            facilities: string;
+        };
+    } & {
+        origin: string;
+        destination: string;
+        departureTime: Date;
+        arrivalTime: Date;
+        price: number;
+        totalTickets: number;
+        availableTickets: number;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        busId: number;
+    })[]>;
+    findByDate(date: string): Promise<({
+        bus: {
+            isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
+            name: string;
+            class: string;
+            totalSeats: number;
+            facilities: string;
+        };
+    } & {
+        origin: string;
+        destination: string;
+        departureTime: Date;
+        arrivalTime: Date;
+        price: number;
+        totalTickets: number;
+        availableTickets: number;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        busId: number;
+    })[]>;
+    getSeats(scheduleId: number): Promise<{
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        busId: number;
+        seatNumber: string;
+        isBooked: boolean;
+        bookingId: number | null;
+    }[]>;
 }
