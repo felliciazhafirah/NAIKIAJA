@@ -126,7 +126,7 @@ model Booking {
 model Ticket {
   id            Int   @id @default(autoincrement())
 
-  qrCode        String
+  qrCode        String @db.Text
 
   bookingId     Int   @unique
   booking       Booking @relation(fields: [bookingId], references: [id])
