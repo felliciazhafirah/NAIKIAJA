@@ -6,111 +6,111 @@ export declare class RefundsService {
     private notificationService;
     constructor(prisma: PrismaService, notificationService: NotificationService);
     create(dto: CreateRefundDto): Promise<{
-        reason: string;
-        status: string;
         createdAt: Date;
         updatedAt: Date;
         id: number;
         bookingId: number;
+        status: string;
+        reason: string;
     }>;
     getMyRefund(userId: number): Promise<({
         booking: {
-            status: import(".prisma/client").$Enums.BookingStatus;
             createdAt: Date;
             updatedAt: Date;
             id: number;
             Namalengkap: string;
-            totalPrice: number;
             Email: string;
             NoHp: string;
             KTP: string;
             userId: number;
             scheduleId: number;
+            totalPrice: number;
+            status: import(".prisma/client").$Enums.BookingStatus;
             invoiceNumber: string | null;
         };
     } & {
-        reason: string;
-        status: string;
         createdAt: Date;
         updatedAt: Date;
         id: number;
         bookingId: number;
+        status: string;
+        reason: string;
     })[]>;
     findAll(status?: string): Promise<({
         booking: {
-            status: import(".prisma/client").$Enums.BookingStatus;
             createdAt: Date;
             updatedAt: Date;
             id: number;
             Namalengkap: string;
-            totalPrice: number;
             Email: string;
             NoHp: string;
             KTP: string;
             userId: number;
             scheduleId: number;
+            totalPrice: number;
+            status: import(".prisma/client").$Enums.BookingStatus;
             invoiceNumber: string | null;
         };
     } & {
-        reason: string;
-        status: string;
         createdAt: Date;
         updatedAt: Date;
         id: number;
         bookingId: number;
+        status: string;
+        reason: string;
     })[]>;
     findOne(id: number): Promise<{
-        reason: string;
-        status: string;
         createdAt: Date;
         updatedAt: Date;
         id: number;
         bookingId: number;
+        status: string;
+        reason: string;
     }>;
     findMyRefunds(userId: number): Promise<({
         booking: {
-            status: import(".prisma/client").$Enums.BookingStatus;
             createdAt: Date;
             updatedAt: Date;
             id: number;
             Namalengkap: string;
-            totalPrice: number;
             Email: string;
             NoHp: string;
             KTP: string;
             userId: number;
             scheduleId: number;
+            totalPrice: number;
+            status: import(".prisma/client").$Enums.BookingStatus;
             invoiceNumber: string | null;
         };
     } & {
-        reason: string;
-        status: string;
         createdAt: Date;
         updatedAt: Date;
         id: number;
         bookingId: number;
+        status: string;
+        reason: string;
     })[]>;
     approve(refundId: number): Promise<{
         booking: {
-            status: import(".prisma/client").$Enums.BookingStatus;
             createdAt: Date;
             updatedAt: Date;
             id: number;
             Namalengkap: string;
-            totalPrice: number;
             Email: string;
             NoHp: string;
             KTP: string;
             userId: number;
             scheduleId: number;
+            totalPrice: number;
+            status: import(".prisma/client").$Enums.BookingStatus;
             invoiceNumber: string | null;
         };
     } & {
-        reason: string;
-        status: string;
         createdAt: Date;
         updatedAt: Date;
         id: number;
         bookingId: number;
+        status: string;
+        reason: string;
     }>;
 }

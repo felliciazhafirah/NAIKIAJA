@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 
 import { PrismaService } from '../prisma/prisma.service'
 import { CreateBusDto } from './dto/create-bus.dto'
+import { UpdateBusDto } from './dto/update-bus.dto'
 
 @Injectable()
 export class BusesService {
@@ -28,6 +29,8 @@ export class BusesService {
     return bus
   }
 
+  
+
   async remove(id: number) {
     return this.prisma.bus.update({
       where: {
@@ -39,6 +42,17 @@ export class BusesService {
       },
     })
   }
+
+
+  async update(
+  id: number,
+  dto: UpdateBusDto,
+) {
+  return this.prisma.bus.update({
+    where: { id },
+    data: dto,
+  });
+}
 
 
   async findAll(busClass?: string) {

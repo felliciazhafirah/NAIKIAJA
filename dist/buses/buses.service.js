@@ -42,6 +42,12 @@ let BusesService = class BusesService {
             },
         });
     }
+    async update(id, dto) {
+        return this.prisma.bus.update({
+            where: { id },
+            data: dto,
+        });
+    }
     async findAll(busClass) {
         return this.prisma.bus.findMany({
             where: busClass

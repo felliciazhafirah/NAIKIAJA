@@ -21,6 +21,7 @@ const roles_guard_1 = require("../auth/roles.guard");
 const roles_decorator_1 = require("../auth/roles.decorator");
 const role_enum_1 = require("../auth/role.enum");
 const swagger_1 = require("@nestjs/swagger");
+const update_bus_dto_1 = require("./dto/update-bus.dto");
 let BusesController = class BusesController {
     constructor(service) {
         this.service = service;
@@ -28,8 +29,11 @@ let BusesController = class BusesController {
     create(dto) {
         return this.service.create(dto);
     }
+    update(id, dto) {
+        return this.service.update(+id, dto);
+    }
     remove(id) {
-        return this.service.remove(Number(id));
+        return this.service.remove(+id);
     }
     findAll() {
         return this.service.findAll();
@@ -47,12 +51,17 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], BusesController.prototype, "create", null);
 __decorate([
-    (0, swagger_1.ApiBearerAuth)('access-token'),
     (0, roles_decorator_1.Roles)(role_enum_1.Role.ADMIN),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, common_1.Put)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, update_bus_dto_1.UpdateBusDto]),
+    __metadata("design:returntype", void 0)
+], BusesController.prototype, "update", null);
+__decorate([
+    (0, roles_decorator_1.Roles)(role_enum_1.Role.ADMIN),
     (0, common_1.Delete)(':id'),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)(role_enum_1.Role.ADMIN),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

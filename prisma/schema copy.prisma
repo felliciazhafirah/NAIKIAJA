@@ -1,0 +1,147 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum BookingStatus {
+  PENDING
+  PAID
+  CANCELLED
+  REFUNDED
+}
+
+
+model User {
+  id          Int   @id @default(autoincrement())
+  name        String
+  email       String   @unique
+  password    String
+  phone       String?
+
+  role        Role     @default(USER)
+
+  createdAt   DateTime @default(now())
+
+  bookings    Booking[]
+  notifications Notification[]
+  updatedAt DateTime @updatedAt
+
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Bus {
+  id            Int   @id @default(autoincrement())
+
+  name          String
+  class         String
+  totalSeats    Int
+  facilities    String
+
+   isActive    Boolean @default(true)
+  schedules     Schedule[]
+  seats         Seat[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Schedule {
+  id                Int   @id @default(autoincrement())
+
+  origin            String
+  destination       String
+
+  departureTime     DateTime
+  arrivalTime       DateTime
+
+  price             Int
+
+  totalTickets      Int
+  availableTickets  Int
+
+  busId             Int
+  bus               Bus @relation(fields: [busId], references: [id])
+   isActive Boolean @default(true)
+
+  bookings          Booking[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Seat {
+  id            Int   @id @default(autoincrement())
+
+  seatNumber    String 
+  isBooked      Boolean  @default(false)
+
+  busId         Int
+  bus           Bus @relation(fields: [busId], references: [id])
+
+  bookingId     Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@unique([busId, seatNumber])
+  booking       Booking? @relation(fields: [bookingId], references: [id])
+}
+
+model Booking {
+  id            Int   @id @default(autoincrement())
+  Namalengkap   String
+  totalPrice    Int
+  Email         String
+  NoHp          String
+  KTP           String
+  status        BookingStatus
+  userId        Int
+  user          User @relation(fields: [userId], references: [id])
+  scheduleId    Int
+  schedule      Schedule @relation(fields: [scheduleId], references: [id])
+  seats         Seat[]
+  createdAt     DateTime @default(now())
+  ticket        Ticket?
+  refunds Refund[]
+  invoiceNumber String?   @unique
+
+  updatedAt DateTime @updatedAt
+}
+
+model Ticket {
+  id            Int   @id @default(autoincrement())
+
+  qrCode        String
+
+  bookingId     Int   @unique
+  booking       Booking @relation(fields: [bookingId], references: [id])
+  
+}
+
+model Refund {
+  id          Int @id @default(autoincrement())
+
+  reason      String
+
+  status      String
+
+  bookingId   Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  booking     Booking @relation(fields: [bookingId], references: [id])
+}

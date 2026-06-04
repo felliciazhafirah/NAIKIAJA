@@ -5,9 +5,11 @@ export declare class BookingsController {
     constructor(service: BookingsService);
     getMyBookings(req: any): Promise<({
         schedule: {
-            id: number;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
+            isActive: boolean;
+            busId: number;
             origin: string;
             destination: string;
             departureTime: Date;
@@ -15,51 +17,51 @@ export declare class BookingsController {
             price: number;
             totalTickets: number;
             availableTickets: number;
-            busId: number;
-            isActive: boolean;
         };
         seats: {
-            id: number;
             createdAt: Date;
             updatedAt: Date;
-            busId: number;
+            id: number;
             seatNumber: string;
             isBooked: boolean;
+            busId: number;
             bookingId: number | null;
         }[];
     } & {
+        createdAt: Date;
+        updatedAt: Date;
         id: number;
         Namalengkap: string;
-        totalPrice: number;
         Email: string;
         NoHp: string;
         KTP: string;
-        status: import(".prisma/client").$Enums.BookingStatus;
         userId: number;
         scheduleId: number;
-        createdAt: Date;
+        totalPrice: number;
+        status: import(".prisma/client").$Enums.BookingStatus;
         invoiceNumber: string | null;
-        updatedAt: Date;
     })[]>;
     payBooking(id: string): Promise<{
+        createdAt: Date;
+        updatedAt: Date;
         id: number;
         Namalengkap: string;
-        totalPrice: number;
         Email: string;
         NoHp: string;
         KTP: string;
-        status: import(".prisma/client").$Enums.BookingStatus;
         userId: number;
         scheduleId: number;
-        createdAt: Date;
+        totalPrice: number;
+        status: import(".prisma/client").$Enums.BookingStatus;
         invoiceNumber: string | null;
-        updatedAt: Date;
     }>;
     getInvoice(id: string): Promise<{
         schedule: {
-            id: number;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
+            isActive: boolean;
+            busId: number;
             origin: string;
             destination: string;
             departureTime: Date;
@@ -67,44 +69,42 @@ export declare class BookingsController {
             price: number;
             totalTickets: number;
             availableTickets: number;
-            busId: number;
-            isActive: boolean;
         };
         seats: {
-            id: number;
             createdAt: Date;
             updatedAt: Date;
-            busId: number;
+            id: number;
             seatNumber: string;
             isBooked: boolean;
+            busId: number;
             bookingId: number | null;
         }[];
     } & {
+        createdAt: Date;
+        updatedAt: Date;
         id: number;
         Namalengkap: string;
-        totalPrice: number;
         Email: string;
         NoHp: string;
         KTP: string;
-        status: import(".prisma/client").$Enums.BookingStatus;
         userId: number;
         scheduleId: number;
-        createdAt: Date;
+        totalPrice: number;
+        status: import(".prisma/client").$Enums.BookingStatus;
         invoiceNumber: string | null;
-        updatedAt: Date;
     }>;
     create(dto: CreateBookingDto): Promise<{
+        createdAt: Date;
+        updatedAt: Date;
         id: number;
         Namalengkap: string;
-        totalPrice: number;
         Email: string;
         NoHp: string;
         KTP: string;
-        status: import(".prisma/client").$Enums.BookingStatus;
         userId: number;
         scheduleId: number;
-        createdAt: Date;
+        totalPrice: number;
+        status: import(".prisma/client").$Enums.BookingStatus;
         invoiceNumber: string | null;
-        updatedAt: Date;
     }>;
 }

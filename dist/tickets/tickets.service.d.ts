@@ -42,14 +42,14 @@ export declare class TicketsService {
             updatedAt: Date;
             id: number;
             Namalengkap: string;
-            totalPrice: number;
             Email: string;
             NoHp: string;
             KTP: string;
-            status: import(".prisma/client").$Enums.BookingStatus;
-            invoiceNumber: string | null;
             userId: number;
             scheduleId: number;
+            totalPrice: number;
+            status: import(".prisma/client").$Enums.BookingStatus;
+            invoiceNumber: string | null;
         };
     } & {
         id: number;
@@ -96,14 +96,14 @@ export declare class TicketsService {
             updatedAt: Date;
             id: number;
             Namalengkap: string;
-            totalPrice: number;
             Email: string;
             NoHp: string;
             KTP: string;
-            status: import(".prisma/client").$Enums.BookingStatus;
-            invoiceNumber: string | null;
             userId: number;
             scheduleId: number;
+            totalPrice: number;
+            status: import(".prisma/client").$Enums.BookingStatus;
+            invoiceNumber: string | null;
         };
     } & {
         id: number;

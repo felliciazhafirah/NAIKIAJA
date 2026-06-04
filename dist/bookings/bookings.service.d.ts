@@ -4,38 +4,40 @@ export declare class BookingsService {
     private prisma;
     constructor(prisma: PrismaService);
     createBooking(userId: number, dto: CreateBookingDto): Promise<{
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
         Namalengkap: string;
-        totalPrice: number;
         Email: string;
         NoHp: string;
         KTP: string;
-        status: import(".prisma/client").$Enums.BookingStatus;
-        createdAt: Date;
-        invoiceNumber: string | null;
-        updatedAt: Date;
-        id: number;
         userId: number;
         scheduleId: number;
+        totalPrice: number;
+        status: import(".prisma/client").$Enums.BookingStatus;
+        invoiceNumber: string | null;
     }>;
     payBooking(id: number): Promise<{
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
         Namalengkap: string;
-        totalPrice: number;
         Email: string;
         NoHp: string;
         KTP: string;
-        status: import(".prisma/client").$Enums.BookingStatus;
-        createdAt: Date;
-        invoiceNumber: string | null;
-        updatedAt: Date;
-        id: number;
         userId: number;
         scheduleId: number;
+        totalPrice: number;
+        status: import(".prisma/client").$Enums.BookingStatus;
+        invoiceNumber: string | null;
     }>;
     getInvoice(id: number): Promise<{
         schedule: {
             createdAt: Date;
             updatedAt: Date;
             id: number;
+            isActive: boolean;
+            busId: number;
             origin: string;
             destination: string;
             departureTime: Date;
@@ -43,37 +45,37 @@ export declare class BookingsService {
             price: number;
             totalTickets: number;
             availableTickets: number;
-            busId: number;
-            isActive: boolean;
         };
         seats: {
             createdAt: Date;
             updatedAt: Date;
             id: number;
-            busId: number;
             seatNumber: string;
             isBooked: boolean;
+            busId: number;
             bookingId: number | null;
         }[];
     } & {
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
         Namalengkap: string;
-        totalPrice: number;
         Email: string;
         NoHp: string;
         KTP: string;
-        status: import(".prisma/client").$Enums.BookingStatus;
-        createdAt: Date;
-        invoiceNumber: string | null;
-        updatedAt: Date;
-        id: number;
         userId: number;
         scheduleId: number;
+        totalPrice: number;
+        status: import(".prisma/client").$Enums.BookingStatus;
+        invoiceNumber: string | null;
     }>;
     getMyBookings(userId: number): Promise<({
         schedule: {
             createdAt: Date;
             updatedAt: Date;
             id: number;
+            isActive: boolean;
+            busId: number;
             origin: string;
             destination: string;
             departureTime: Date;
@@ -81,30 +83,28 @@ export declare class BookingsService {
             price: number;
             totalTickets: number;
             availableTickets: number;
-            busId: number;
-            isActive: boolean;
         };
         seats: {
             createdAt: Date;
             updatedAt: Date;
             id: number;
-            busId: number;
             seatNumber: string;
             isBooked: boolean;
+            busId: number;
             bookingId: number | null;
         }[];
     } & {
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
         Namalengkap: string;
-        totalPrice: number;
         Email: string;
         NoHp: string;
         KTP: string;
-        status: import(".prisma/client").$Enums.BookingStatus;
-        createdAt: Date;
-        invoiceNumber: string | null;
-        updatedAt: Date;
-        id: number;
         userId: number;
         scheduleId: number;
+        totalPrice: number;
+        status: import(".prisma/client").$Enums.BookingStatus;
+        invoiceNumber: string | null;
     })[]>;
 }
